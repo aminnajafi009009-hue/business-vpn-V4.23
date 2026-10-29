@@ -119,6 +119,9 @@ def _is_paging(old: dict, new: dict, pressed: str) -> bool:
         import re as _re
         if not data or not _re.search(r"\d+$", data):
             return False
+        # لیست کاربران: جابه‌جایی بین سورت‌ها/صفحات (ul_<sort>_<page>) پشته‌ی بازگشت را پر نمی‌کند
+        if _re.match(r"^ul_[a-z]+_\d+$", data) and any(_re.match(r"^ul_[a-z]+_\d+$", c) for c in _cbs(old["markup"])):
+            return True
         if (pressed or "").strip() and not any(w in pressed for w in ("صفحه", "قبلی", "بعدی", "➡", "⬅", "◀", "▶")):
             return False
         h = _head(data)
